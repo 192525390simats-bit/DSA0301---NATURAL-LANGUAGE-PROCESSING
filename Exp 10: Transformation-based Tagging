@@ -1,0 +1,14 @@
+words = input("Enter sentence: ").split()
+
+for w in words:
+    tag = "NN"   # default noun
+
+    # transformation rules
+    if w.endswith("ing"):
+        tag = "VB"
+    elif w.lower() in ["in", "on", "at"]:
+        tag = "IN"
+    elif w.lower() in ["the", "a", "an"]:
+        tag = "DT"
+
+    print(w, "->", tag)
