@@ -1,0 +1,9 @@
+import random
+
+words = input("Enter sentence: ").split()
+
+# Standard POS tags
+tags = ["NN", "VB", "JJ", "RB", "DT", "IN", "PRP"]
+
+for w in words:
+    print(w, "->", random.choice(tags))
