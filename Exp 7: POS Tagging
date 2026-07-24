@@ -1,0 +1,11 @@
+words = input("Enter sentence: ").split()
+
+for w in words:
+    if w.endswith("ing"):
+        print(w, "-> VERB")
+    elif w.endswith("ly"):
+        print(w, "-> ADVERB")
+    elif w.endswith("ed"):
+        print(w, "-> VERB")
+    else:
+        print(w, "-> NOUN")
