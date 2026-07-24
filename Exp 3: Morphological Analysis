@@ -1,0 +1,12 @@
+text = input("Enter sentence: ")
+words = text.split()
+
+for w in words:
+    if w.endswith("ing"):
+        print(w, "-> root:", w[:-3], "suffix: ing")
+    elif w.endswith("ed"):
+        print(w, "-> root:", w[:-2], "suffix: ed")
+    elif w.endswith("s"):
+        print(w, "-> root:", w[:-1], "suffix: s")
+    else:
+        print(w, "-> root:", w, "suffix: none")
