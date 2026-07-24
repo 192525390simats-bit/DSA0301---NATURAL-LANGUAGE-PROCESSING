@@ -1,0 +1,15 @@
+words = input("Enter sentence: ").split()
+
+for w in words:
+    if w.lower() in ["in", "on", "at", "under"]:
+        print(w, "-> IN")
+    elif w.lower() in ["the", "a", "an"]:
+        print(w, "-> DT")
+    elif w.endswith("ing"):
+        print(w, "-> VB")
+    elif w.endswith("ly"):
+        print(w, "-> RB")
+    elif w.lower() in ["he", "she", "it", "they"]:
+        print(w, "-> PRP")
+    else:
+        print(w, "-> NN")
