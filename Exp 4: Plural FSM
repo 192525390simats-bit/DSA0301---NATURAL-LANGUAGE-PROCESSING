@@ -1,0 +1,8 @@
+word = input("Enter word: ")
+
+if word.endswith("y"):
+    print(word[:-1] + "ies")
+elif word.endswith("s") or word.endswith("sh") or word.endswith("ch"):
+    print(word + "es")
+else:
+    print(word + "s")
