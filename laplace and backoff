@@ -1,0 +1,100 @@
+from collections import defaultdict, Counter
+
+# ---------------- DATA ----------------
+corpus = [
+    "i love nlp",
+    "i study nlp",
+    "we study python",
+    "you study nlp",
+    "i love python"
+]
+
+tokens = [s.split() for s in corpus]
+
+# ---------------- COUNTS ----------------
+unigram = Counter()
+bigram = defaultdict(Counter)
+trigram = defaultdict(Counter)
+
+for sent in tokens:
+    for i in range(len(sent)):
+        unigram[sent[i]] += 1
+        
+        if i < len(sent) - 1:
+            bigram[sent[i]][sent[i+1]] += 1
+        
+        if i < len(sent) - 2:
+            trigram[(sent[i], sent[i+1])][sent[i+2]] += 1
+
+V = len(unigram)
+total_words = sum(unigram.values())
+
+# ---------------- LAPLACE (BIGRAM ONLY) ----------------
+def laplace_sentence_prob(sentence):
+    words = sentence.split()
+    prob = 1
+
+    print("\nLaplace Steps (Bigram +1):")
+    for i in range(len(words) - 1):
+        w1, w2 = words[i], words[i+1]
+
+        num = bigram[w1][w2] + 1
+        den = unigram[w1] + V
+
+        p = num / den
+        prob *= p
+
+        print(f"P({w2}|{w1}) = ({num})/({den}) = {p:.4f}  [+1]")
+
+    return prob
+
+# ---------------- BACKOFF ----------------
+def backoff_sentence_prob(sentence):
+    words = sentence.split()
+    prob = 1
+
+    print("\nBackoff Steps:")
+    for i in range(len(words) - 2):
+        w1, w2, w3 = words[i], words[i+1], words[i+2]
+
+        # Trigram
+        if trigram[(w1, w2)][w3] > 0:
+            p = trigram[(w1, w2)][w3] / bigram[w1][w2]
+            print(f"P({w3}|{w1},{w2}) = {p:.4f}  [trigram]")
+
+        # Bigram
+        elif bigram[w2][w3] > 0:
+            p = bigram[w2][w3] / unigram[w2]
+            print(f"P({w3}|{w2}) = {p:.4f}  [bigram]")
+
+        # Unigram
+        else:
+            p = unigram[w3] / total_words
+            print(f"P({w3}) = {p:.4f}  [unigram]")
+
+        prob *= p
+
+    return prob
+
+# ---------------- RUN ----------------
+while True:
+    s = input("\nEnter sentence (or exit): ")
+    if s.lower() == "exit":
+        break
+
+    words = s.split()
+    if len(words) < 2:
+        print("Enter at least 2 words")
+        continue
+
+    lap = laplace_sentence_prob(s)
+
+    if len(words) >= 3:
+        back = backoff_sentence_prob(s)
+    else:
+        back = 0
+        print("\nBackoff needs at least 3 words")
+
+    print("\nFinal Sentence Probability:")
+    print(f"Laplace = {lap:.6f}")
+    print(f"Backoff = {back:.6f}")
