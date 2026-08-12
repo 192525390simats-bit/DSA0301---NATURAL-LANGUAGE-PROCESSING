@@ -1,0 +1,17 @@
+grammar = {
+    "S": ["NP_s VP_s", "NP_p VP_p"],
+    "NP_s": ["The boy", "The girl"],
+    "NP_p": ["The boys", "The girls"],
+    "VP_s": ["runs", "plays"],
+    "VP_p": ["run", "play"]
+}
+
+sentence = input("Enter sentence: ").lower()
+
+if sentence in ["the boy runs", "the girl runs",
+                "the boys run", "the girls run",
+                "the boy plays", "the girl plays",
+                "the boys play", "the girls play"]:
+    print("Agreement: CORRECT")
+else:
+    print("Agreement: INCORRECT")
