@@ -1,0 +1,28 @@
+# PCFG Parser
+
+grammar = {
+    "S": [(["NP", "VP"], 1.0)],
+    "NP": [(["Det", "N"], 0.8)],
+    "VP": [(["V", "NP"], 0.7)],
+    "Det": [(["the"], 1.0)],
+    "N": [(["cat"], 0.6), (["dog"], 0.4)],
+    "V": [(["sees"], 0.5), (["likes"], 0.5)]
+}
+
+sentence = input("Enter sentence: ").lower().split()
+
+prob = 1
+rules = ["S → NP VP", "NP → Det N", "VP → V NP",
+         "Det → the", "N → " + sentence[1],
+         "V → " + sentence[2], "NP → Det N"]
+
+for r in rules:
+    print(r)
+
+for word in sentence:
+    for rule in grammar.get("N", []) + grammar.get("V", []):
+        if word in rule[0]:
+            prob *= rule[1]
+
+print("\nSentence:", " ".join(sentence))
+print("Probability:", round(prob, 3))
