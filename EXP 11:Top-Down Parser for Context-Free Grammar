@@ -1,0 +1,51 @@
+# Simple Top-Down Parser for Context-Free Grammar
+
+grammar = {
+    "S": [["NP", "VP"]],
+    "NP": [["Det", "N"]],
+    "VP": [["V", "NP"]],
+    "Det": [["the"], ["a"]],
+    "N": [["cat"], ["dog"]],
+    "V": [["sees"], ["likes"]]
+}
+
+def parse(symbol, words, position):
+    if symbol not in grammar:
+        if position < len(words) and symbol == words[position]:
+            return position + 1
+        return None
+
+    for production in grammar[symbol]:
+        current = position
+        success = True
+
+        for item in production:
+            result = parse(item, words, current)
+
+            if result is None:
+                success = False
+                break
+
+            current = result
+
+        if success:
+            return current
+
+    return None
+
+
+# Input sentence
+sentence = input("Enter a sentence: ").lower()
+words = sentence.split()
+
+# Start parsing from S
+result = parse("S", words, 0)
+
+if result == len(words):
+    print("\nSentence:", sentence)
+    print("Result: Sentence is ACCEPTED")
+    print("The sentence follows the given Context-Free Grammar.")
+else:
+    print("\nSentence:", sentence)
+    print("Result: Sentence is REJECTED")
+    print("The sentence does not follow the given Context-Free Grammar.")
