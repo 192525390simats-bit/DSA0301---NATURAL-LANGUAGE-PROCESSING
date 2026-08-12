@@ -1,0 +1,27 @@
+# Parse Tree
+
+G = {
+    "S": ["NP", "VP"],
+    "NP": ["Det", "N"],
+    "VP": ["V", "NP"],
+    "Det": ["the"],
+    "N": ["cat"],
+    "V": ["sees"]
+}
+
+def tree(x, space=""):
+    print(space + x)
+    if x in G:
+        for y in G[x]:
+            tree(y, space + "  ")
+
+print("CONTEXT-FREE GRAMMAR")
+print("S → NP VP")
+print("NP → Det N")
+print("VP → V NP")
+print("Det → the")
+print("N → cat")
+print("V → sees")
+
+print("\nPARSE TREE:")
+tree("S")
