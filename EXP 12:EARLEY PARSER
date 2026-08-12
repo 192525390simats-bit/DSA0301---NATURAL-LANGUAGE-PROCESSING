@@ -1,0 +1,37 @@
+# Earley Parser
+
+G = {
+    'S': [['NP', 'VP']],
+    'NP': [['Det', 'N']],
+    'VP': [['V', 'NP']],
+    'Det': [['the'], ['a']],
+    'N': [['cat'], ['dog']],
+    'V': [['sees'], ['likes']]
+}
+
+def parse(s):
+    w = s.split()
+    chart = [set() for _ in range(len(w) + 1)]
+    chart[0].add(('S', 0, 0))
+
+    for i in range(len(w) + 1):
+        for A, p, k in list(chart[i]):
+            if p < len(G[A]):
+                for r in G[A]:
+                    if r[0] in G:
+                        chart[i].add((r[0], 0, i))
+                    elif i < len(w) and r[0] == w[i]:
+                        chart[i + 1].add((A, p + 1, k))
+
+    return ('S', 1, 0) in chart[len(w)]
+
+print("EARLEY PARSER")
+print("S → NP VP")
+print("NP → Det N")
+print("VP → V NP")
+print("Det → the | a")
+print("N → cat | dog")
+print("V → sees | likes")
+
+s = input("\nEnter sentence: ")
+print("Accepted" if parse(s) else "Rejected")
